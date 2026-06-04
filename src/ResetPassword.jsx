@@ -37,7 +37,7 @@ export default function ResetPassword() {
       setError(error.message);
       setLoading(false);
     } else {
-      navigate('/login');
+      window.location.href = '/app';
     }
   };
 

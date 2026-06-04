@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Droplet } from 'lucide-react';
 import { supabase } from './supabaseClient';
 import { App as CapacitorApp } from '@capacitor/app';
@@ -104,6 +104,17 @@ function AuthHandler({ setSession }) {
   return null;
 }
 
+function AppLayout({ session }) {
+  const location = useLocation();
+  const hideNav = location.pathname === '/reset-password';
+
+  return (
+    <>
+      {!hideNav && <Navigation session={session} />}
+    </>
+  );
+}
+
 function App() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -131,7 +142,7 @@ function App() {
       <div className="bg-gradient-blob"></div>
       <div className="bg-gradient-blob-2"></div>
       
-      <Navigation session={session} />
+      <AppLayout session={session} />
 
       <main className="container" style={{ paddingTop: '2rem', paddingBottom: '4rem' }}>
         <Routes>
