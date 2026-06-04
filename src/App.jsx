@@ -146,22 +146,24 @@ function App() {
 
       <main className="container" style={{ paddingTop: '2rem', paddingBottom: '4rem' }}>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={!session ? <Login /> : (isRecovery ? <Navigate to="/reset-password" /> : <Navigate to="/app" />)} />
-          <Route path="/register" element={!session ? <Register /> : (isRecovery ? <Navigate to="/reset-password" /> : <Navigate to="/app" />)} />
+          <Route path="/" element={isRecovery ? <Navigate to="/reset-password" replace /> : <Landing />} />
+          <Route path="/login" element={isRecovery ? <Navigate to="/reset-password" replace /> : (!session ? <Login /> : <Navigate to="/app" />)} />
+          <Route path="/register" element={isRecovery ? <Navigate to="/reset-password" replace /> : (!session ? <Register /> : <Navigate to="/app" />)} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route 
             path="/app" 
             element={
+              isRecovery ? <Navigate to="/reset-password" replace /> :
               <ProtectedRoute session={session}>
-                {isRecovery ? <Navigate to="/reset-password" /> : <ColorimeterTool session={session} />}
+                <ColorimeterTool session={session} />
               </ProtectedRoute>
             } 
           />
           <Route 
             path="/reports" 
             element={
+              isRecovery ? <Navigate to="/reset-password" replace /> :
               <ProtectedRoute session={session}>
                 <Reports session={session} />
               </ProtectedRoute>
