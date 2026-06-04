@@ -86,25 +86,41 @@ function BackButtonListener() {
   return null;
 }
 
-function App() {
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
+function AuthHandler({ setSession }) {
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setLoading(false);
     });
 
-    // Listen for auth changes
+    // Listen for auth changes and catch password recovery
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
+      
+      if (event === 'PASSWORD_RECOVERY') {
+        navigate('/reset-password');
+      }
     });
 
     return () => subscription.unsubscribe();
+  }, [navigate, setSession]);
+
+  return null;
+}
+
+function App() {
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Just handle initial loading state
+    supabase.auth.getSession().then(() => {
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
@@ -113,6 +129,7 @@ function App() {
 
   return (
     <Router>
+      <AuthHandler setSession={setSession} />
       <BackButtonListener />
       <div className="bg-gradient-blob"></div>
       <div className="bg-gradient-blob-2"></div>
