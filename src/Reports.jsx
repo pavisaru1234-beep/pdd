@@ -36,11 +36,19 @@ export default function Reports({ session }) {
     const reportElement = document.getElementById(`report-${report.id}`);
     if (!reportElement) return;
     
-    // Temporarily adjust styling for PDF snapshot
-    reportElement.style.background = '#1a1a2e'; // Solid background for PDF
+    // Find the button and hide it
+    const downloadBtn = reportElement.querySelector('button');
+    const originalBtnDisplay = downloadBtn ? downloadBtn.style.display : '';
+    if (downloadBtn) downloadBtn.style.display = 'none';
+
+    // Temporarily force desktop width for a clean A4 rendering
+    const originalWidth = reportElement.style.width;
+    const originalBackground = reportElement.style.background;
+    reportElement.style.width = '800px';
+    reportElement.style.background = '#0f172a';
     
     try {
-      const canvas = await html2canvas(reportElement, { scale: 2, useCORS: true });
+      const canvas = await html2canvas(reportElement, { scale: 2, useCORS: true, windowWidth: 800 });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -70,7 +78,10 @@ export default function Reports({ session }) {
     } catch (err) {
       console.error("PDF generation failed:", err);
     } finally {
-      reportElement.style.background = ''; // Revert style
+      // Revert styles
+      if (downloadBtn) downloadBtn.style.display = originalBtnDisplay;
+      reportElement.style.width = originalWidth;
+      reportElement.style.background = originalBackground;
     }
   };
 
