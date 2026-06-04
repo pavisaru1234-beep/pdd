@@ -90,6 +90,11 @@ function AuthHandler({ setSession }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fallback: Manually check if URL contains a recovery hash fragment
+    if (window.location.hash.includes('type=recovery')) {
+      navigate('/reset-password');
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
