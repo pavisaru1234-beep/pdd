@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ChromaML</string>
+    <string name="title_activity_main">ChromaML</string>
+    <string name="package_name">com.pavisaru.chromaml</string>
+    <string name="custom_url_scheme">com.pavisaru.chromaml</string>
+</resources>

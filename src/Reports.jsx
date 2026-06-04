@@ -78,7 +78,7 @@ export default function Reports({ session }) {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {reports.map((report) => (
-            <div key={report.id} id={`report-${report.id}`} className="glass-panel" style={{ padding: '2rem', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem', position: 'relative' }}>
+            <div key={report.id} id={`report-${report.id}`} className="glass-panel" style={{ padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', position: 'relative' }}>
               <button 
                 onClick={() => handleDownloadPDF(report)}
                 className="btn btn-secondary"

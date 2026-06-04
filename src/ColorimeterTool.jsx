@@ -83,7 +83,7 @@ export default function ColorimeterTool({ session }) {
         <p style={{ color: 'var(--text-secondary)' }}>Upload a video of your titration flask for computer vision analysis.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
         <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <Upload size={20} className="text-gradient" /> Input Media
@@ -167,7 +167,7 @@ export default function ColorimeterTool({ session }) {
                   </div>
                 )}
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
                   <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px' }}>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: 0 }}>Confidence Score</p>
                     <p style={{ fontSize: '1.5rem', fontWeight: '700', margin: 0, color: 'var(--accent-primary)' }}>{result.confidence}%</p>
