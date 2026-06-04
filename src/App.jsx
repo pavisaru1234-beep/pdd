@@ -37,6 +37,9 @@ function Navigation({ session }) {
             <Link to="/reports" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', borderRadius: '50px', textDecoration: 'none', border: '1px solid var(--accent-primary)' }}>
               My Reports
             </Link>
+            <Link to="/reset-password" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', borderRadius: '50px', textDecoration: 'none' }}>
+              Change Password
+            </Link>
             <button 
               className="btn btn-secondary" 
               style={{ padding: '0.5rem 1rem', borderRadius: '50px' }}
