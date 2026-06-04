@@ -92,7 +92,8 @@ export default function ColorimeterTool({ session }) {
           <div style={{ 
             flex: 1, border: '2px dashed var(--glass-border)', borderRadius: '12px', 
             display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
-            position: 'relative', overflow: 'hidden', minHeight: '350px', backgroundColor: 'rgba(0,0,0,0.2)'
+            position: 'relative', overflow: 'hidden', minHeight: '350px', backgroundColor: 'rgba(0,0,0,0.2)',
+            textAlign: 'center'
           }}>
             {selectedFile ? (
               fileType === 'video' ? (
@@ -103,8 +104,8 @@ export default function ColorimeterTool({ session }) {
             ) : (
               <>
                 <Upload size={48} color="var(--text-secondary)" style={{ marginBottom: '1rem' }} />
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Click or drag file here</p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Please upload an MP4 or MOV video</p>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '0.5rem', textAlign: 'center' }}>Click or drag file here</p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textAlign: 'center' }}>Please upload an MP4 or MOV video</p>
               </>
             )}
             {!selectedFile && (
