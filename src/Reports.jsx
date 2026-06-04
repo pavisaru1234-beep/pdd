@@ -3,6 +3,9 @@ import { supabase } from './supabaseClient';
 import { Activity, Clock, CheckCircle, Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 
 export default function Reports({ session }) {
   const [reports, setReports] = useState([]);
@@ -44,7 +47,26 @@ export default function Reports({ session }) {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
-      pdf.save(`Titration_Report_${report.video_name.replace('.mp4', '')}.pdf`);
+      
+      const fileName = `Titration_Report_${report.video_name.replace('.mp4', '')}.pdf`;
+
+      if (Capacitor.isNativePlatform()) {
+        const base64Data = pdf.output('datauristring').split(',')[1];
+        
+        const savedFile = await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Cache
+        });
+        
+        await Share.share({
+          title: fileName,
+          url: savedFile.uri,
+          dialogTitle: 'Share or Save PDF Report'
+        });
+      } else {
+        pdf.save(fileName);
+      }
     } catch (err) {
       console.error("PDF generation failed:", err);
     } finally {

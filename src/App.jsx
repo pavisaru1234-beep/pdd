@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import { Droplet } from 'lucide-react';
 import { supabase } from './supabaseClient';
+import { App as CapacitorApp } from '@capacitor/app';
 import './index.css';
 
 import Landing from './Landing';
@@ -66,6 +67,25 @@ const ProtectedRoute = ({ session, children }) => {
   return children;
 };
 
+function BackButtonListener() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const listener = CapacitorApp.addListener('backButton', ({ canGoBack }) => {
+      if (window.location.pathname === '/' || window.location.pathname === '/app') {
+        CapacitorApp.exitApp();
+      } else if (canGoBack) {
+        window.history.back();
+      } else {
+        CapacitorApp.exitApp();
+      }
+    });
+    return () => {
+      listener.then(l => l.remove());
+    };
+  }, []);
+  return null;
+}
+
 function App() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -93,6 +113,7 @@ function App() {
 
   return (
     <Router>
+      <BackButtonListener />
       <div className="bg-gradient-blob"></div>
       <div className="bg-gradient-blob-2"></div>
       
