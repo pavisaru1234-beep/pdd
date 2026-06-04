@@ -37,9 +37,6 @@ function Navigation({ session }) {
             <Link to="/reports" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', borderRadius: '50px', textDecoration: 'none', border: '1px solid var(--accent-primary)' }}>
               My Reports
             </Link>
-            <Link to="/reset-password" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', borderRadius: '50px', textDecoration: 'none' }}>
-              Change Password
-            </Link>
             <button 
               className="btn btn-secondary" 
               style={{ padding: '0.5rem 1rem', borderRadius: '50px' }}
@@ -90,32 +87,19 @@ function BackButtonListener() {
 }
 
 function AuthHandler({ setSession }) {
-  const navigate = useNavigate();
-
   useEffect(() => {
-    // Fallback: Manually check if URL contains a recovery hash fragment
-    if (window.location.hash.includes('type=recovery')) {
-      navigate('/reset-password');
-    }
-
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
-    // Listen for auth changes and catch password recovery
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
-      
-      if (event === 'PASSWORD_RECOVERY') {
-        navigate('/reset-password');
-      }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate, setSession]);
+  }, [setSession]);
 
   return null;
 }
@@ -123,9 +107,14 @@ function AuthHandler({ setSession }) {
 function App() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isRecovery, setIsRecovery] = useState(false);
 
   useEffect(() => {
-    // Just handle initial loading state
+    // Check hash BEFORE Supabase clears it
+    if (window.location.hash.includes('type=recovery')) {
+      setIsRecovery(true);
+    }
+    
     supabase.auth.getSession().then(() => {
       setLoading(false);
     });
@@ -147,15 +136,15 @@ function App() {
       <main className="container" style={{ paddingTop: '2rem', paddingBottom: '4rem' }}>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={!session ? <Login /> : <Navigate to="/app" />} />
-          <Route path="/register" element={!session ? <Register /> : <Navigate to="/app" />} />
+          <Route path="/login" element={!session ? <Login /> : (isRecovery ? <Navigate to="/reset-password" /> : <Navigate to="/app" />)} />
+          <Route path="/register" element={!session ? <Register /> : (isRecovery ? <Navigate to="/reset-password" /> : <Navigate to="/app" />)} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route 
             path="/app" 
             element={
               <ProtectedRoute session={session}>
-                <ColorimeterTool session={session} />
+                {isRecovery ? <Navigate to="/reset-password" /> : <ColorimeterTool session={session} />}
               </ProtectedRoute>
             } 
           />
