@@ -100,25 +100,28 @@ export default function Reports({ session }) {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {reports.map((report) => (
-            <div key={report.id} id={`report-${report.id}`} className="glass-panel" style={{ padding: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', position: 'relative' }}>
-              <button 
-                onClick={() => handleDownloadPDF(report)}
-                className="btn btn-secondary"
-                style={{ position: 'absolute', top: '2rem', right: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', fontSize: '0.85rem' }}
-              >
-                <Download size={16} /> Download PDF
-              </button>
+            <div key={report.id} id={`report-${report.id}`} className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', wordBreak: 'break-all' }}>
+                    <CheckCircle size={20} color={report.endpoint_time ? 'var(--success)' : 'var(--error)'} style={{ flexShrink: 0 }} /> 
+                    {report.video_name}
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <Clock size={14} /> {new Date(report.created_at).toLocaleString()}
+                  </p>
+                </div>
+                <button 
+                  onClick={() => handleDownloadPDF(report)}
+                  className="btn btn-secondary"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+                >
+                  <Download size={16} /> Download PDF
+                </button>
+              </div>
 
-              <div style={{ marginTop: '2rem' }}>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <CheckCircle size={20} color={report.endpoint_time ? 'var(--success)' : 'var(--error)'} /> 
-                  {report.video_name}
-                </h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                  <Clock size={14} /> {new Date(report.created_at).toLocaleString()}
-                </p>
-                
-                <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem' }}>
+                <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '8px' }}>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: 0 }}>Endpoint Time</p>
                   <p style={{ fontSize: '1.5rem', fontWeight: '700', margin: 0, color: 'var(--text-primary)' }}>{report.endpoint_time || 'N/A'}</p>
                 </div>
@@ -127,15 +130,15 @@ export default function Reports({ session }) {
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: 0 }}>Confidence</p>
                   <p style={{ fontSize: '1.25rem', fontWeight: '700', margin: 0, color: 'var(--accent-primary)' }}>{report.confidence_score}%</p>
                 </div>
-                
-                <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--accent-secondary)' }}>
-                  Method: {report.analysis_method}
-                </p>
               </div>
               
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', padding: '1rem' }}>
+              <p style={{ fontSize: '0.9rem', color: 'var(--accent-secondary)' }}>
+                Method: {report.analysis_method}
+              </p>
+              
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', padding: '1rem', width: '100%', overflow: 'hidden' }}>
                 {report.chart_image_b64 ? (
-                  <img src={report.chart_image_b64} alt="Report Chart" style={{ width: '100%', height: 'auto', borderRadius: '8px' }} />
+                  <img src={report.chart_image_b64} alt="Report Chart" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }} />
                 ) : (
                   <p style={{ color: 'var(--text-secondary)' }}>No graph available</p>
                 )}
